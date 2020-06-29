@@ -2,6 +2,9 @@ import React, { useState , useEffect} from 'react';
 import axios from 'axios';
 import Nav from './Nav';
 
+import { Link, useHistory } from 'react-router-dom';
+
+
 const Create = () => {
     // state
     const [state, setState] = useState({
@@ -9,6 +12,8 @@ const Create = () => {
         content: '',
         user: ''
     });
+         
+    
     
     // destructure values from state
     const { title, content, user } = state;
@@ -22,16 +27,17 @@ const Create = () => {
     const handleSubmit = event => {
         event.preventDefault();
         // console.table({ title, content, user });
+        const jwt = localStorage.jwt;
           axios
            .post(`${process.env.REACT_APP_API}/post`, { 
-                method:"post",
-            headers:{
-                "Content-Type":"application/json",
-                "Authorization":"Bearer "+localStorage.getItem("jwt")
-            },
-                body:JSON.stringify({
+                
                title, content, user
-             }) })
+             },
+             {
+                 headers: {
+                     Authorization : `Bearer ${jwt}`
+                 }
+             }) 
             .then(response => {
                 console.log(response);
                 // empty state

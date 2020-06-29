@@ -29,13 +29,21 @@ const App = () => {
 
     const deletePost = slug => {
         // console.log('delete', slug, ' post');
+        const jwt = localStorage.jwt;
+        if (jwt) {
+            const api = `${process.env.REACT_APP_API}/post/${slug}`;
+            const header = { Authorization : `Bearer ${jwt}` };
+        
         axios
-            .delete(`${process.env.REACT_APP_API}/post/${slug}`)
+            .delete(api, {headers: header })
             .then(response => {
                 alert(response.data.message);
                 fetchPosts();
             })
             .catch(error => alert('Error deleting post'));
+        } else {
+            alert("User not logged in")
+        }
     };
 
     return (

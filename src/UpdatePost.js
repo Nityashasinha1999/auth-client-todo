@@ -10,6 +10,9 @@ const UpdatePost = props => {
         user: ''
     });
     const { title, content, slug, user } = state;
+    
+   
+
 
     useEffect(() => {
         axios
@@ -21,6 +24,7 @@ const UpdatePost = props => {
             .catch(error => alert('Error loading single post'));
     }, []);
 
+
     // onchange event handler
     const handleChange = name => event => {
         // console.log('name', name, 'event', event.target.value);
@@ -30,8 +34,15 @@ const UpdatePost = props => {
     const handleSubmit = event => {
         event.preventDefault();
         // console.table({ title, content, user });
+        const jwt = localStorage.jwt;
         axios
-            .put(`${process.env.REACT_APP_API}/post/${slug}`, { title, content, user })
+            .put(`${process.env.REACT_APP_API}/post/${slug}`, { title, content, user },
+            {
+                    headers: {
+                        authorization: `Bearer ${jwt}`
+                    }
+                }
+            )
             .then(response => {
                 console.log(response);
                 const { title, content, slug, user } = response.data;
